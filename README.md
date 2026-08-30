@@ -1,4 +1,7 @@
+
+
 # aerospace-wing-box-fea
+
 # High-g Aerodynamic Loading, Mesh and Element Sensitivity, and Modal Analysis of an Aerospace Wing Box Using APDL
 
 **Author:** Muhammad Yousuf Baig  
@@ -21,11 +24,11 @@ The project covers:
 - Material selection and cost comparison
 - Free-vibration and modal analysis
 
-The complete FEA workflow was carried out using native **ANSYS Parametric Design Language (APDL)** scripts. Python was used where required for data processing and comparison.
+The complete FEA workflow was carried out using native ANSYS Parametric Design Language (APDL) scripts. Python was used where required for data processing and comparison.
 
 ---
 
-# 1. Aerodynamic Loading and Baseline Sizing
+## 1. Aerodynamic Loading and Baseline Sizing
 
 The aerodynamic loading was calculated for supersonic/transonic flight conditions and applied to the wing-box structural model.
 
@@ -67,9 +70,11 @@ Therefore:
 988 MPa > 345 MPa
 ```
 
-and the initial design did not satisfy the yield criterion.
+The initial design therefore did not satisfy the yield criterion.
 
-The thickness was then increased during the structural sizing process. A thickness of:
+The thickness was then increased during the structural sizing process.
+
+A thickness of:
 
 ```text
 31.5 m
@@ -100,19 +105,19 @@ the resulting ratio was:
 R/t = 0.366
 ```
 
-which is below the commonly used thin-shell requirement of approximately:
+This is below the commonly used thin-shell requirement of approximately:
 
 ```text
 R/t > 10
 ```
 
-This means that the 31.5 m thickness violates the assumptions of thin-shell theory.
+Therefore, the 31.5 m thickness does not satisfy the assumptions of thin-shell theory.
 
-This limitation was documented because the model was being used to satisfy the 2D shell-element requirements in ANSYS. The value should therefore be treated as a modeling workaround rather than a practical aerospace structural thickness.
+This limitation was documented because the model was being used to satisfy the 2D shell-element requirements in ANSYS. The thickness should therefore be treated as a modeling workaround rather than a practical aerospace structural thickness.
 
 ---
 
-# 2. Mesh Sensitivity Analysis
+## 2. Mesh Sensitivity Analysis
 
 Mesh sensitivity was investigated using the 4-node linear shell element:
 
@@ -128,39 +133,26 @@ Three mesh densities were tested for the Wing-Up loading case.
 | **Medium** |       0.05 m |  143.0 MPa |       0.004567 m | 1866.06 s | 2090.52 MB |
 | **Fine**   |       0.01 m |  143.0 MPa |       0.004657 m | 2415.87 s | 2016.18 MB |
 
-The maximum stress remained approximately:
+The maximum stress remained approximately 143.0 MPa for all three mesh sizes.
+
+The maximum displacement changed as follows:
 
 ```text
-143.0 MPa
-```
-
-for all three mesh sizes.
-
-The maximum displacement changed from:
-
-```text
-0.004464 m  →  0.004567 m  →  0.004657 m
+0.004464 m → 0.004567 m → 0.004657 m
 ```
 
 as the mesh was refined.
 
-The **0.05 m medium mesh** was selected for the remaining analyses because it provided a good balance between displacement convergence and computational cost.
+The 0.05 m medium mesh was selected for the remaining analyses because it provided a good balance between displacement convergence and computational cost.
 
 ---
 
-# 3. Element Sensitivity Analysis
+## 3. Element Sensitivity Analysis
 
 Two shell element formulations were compared:
 
-```text
-SHELL181
-```
-
-and
-
-```text
-SHELL281
-```
+* SHELL181
+* SHELL281
 
 ### SHELL181
 
@@ -180,23 +172,17 @@ This approached the ANSYS Student version limit of approximately:
 250,000 nodes
 ```
 
-To allow the element formulations to be compared, the SHELL281 analysis was therefore performed using a larger:
+To allow the element formulations to be compared, the SHELL281 analysis was performed using a larger element size:
 
 ```text
-0.10 m element size
+0.10 m
 ```
 
 This allowed the effect of the element formulation to be investigated separately from the finer mesh density.
 
 ### Matrix Singularity
 
-Using the original:
-
-```text
-31.5 m
-```
-
-thickness with the quadratic element model caused solver matrix instability.
+Using the original 31.5 m thickness with the quadratic element model caused solver matrix instability.
 
 To allow the SHELL281 model to solve successfully, the thickness was scaled to:
 
@@ -210,9 +196,9 @@ This adjustment was made specifically to allow the element formulation to be eva
 
 ---
 
-# 4. Material Comparison
+## 4. Material Comparison
 
-Three structural materials were compared using the constant-volume model.
+Three structural materials were compared using a constant-volume model.
 
 The volume was kept constant at:
 
@@ -230,54 +216,50 @@ The comparison was performed using the Medium Mesh with the SHELL181 element.
 
 ### Material Selection
 
-Based on the comparison, **Aluminium 7075-T6** was selected as the preferred material for the final model.
+Based on the comparison, Aluminium 7075-T6 was selected as the preferred material for the final model.
 
-Compared with Aluminium 2024-T3, Aluminium 7075-T6 provides:
+Compared with Aluminium 2024-T3:
 
-```text
-Yield strength:
-503 MPa vs. 345 MPa
+| Parameter         | Aluminium 2024-T3 | Aluminium 7075-T6 |
+| ----------------- | ----------------: | ----------------: |
+| Yield Strength    |           345 MPa |           503 MPa |
+| Total Weight      |    2,082,414.6 kg |    2,104,886.7 kg |
+| Raw Material Cost |     $9,370,865.70 |    $10,945,410.80 |
 
-Increase in yield strength:
-≈45%
-```
-
-The corresponding change in total mass was relatively small:
+The yield strength increase is:
 
 ```text
-2024-T3: 2,082,414.6 kg
-7075-T6: 2,104,886.7 kg
-
-Mass increase:
-≈1.07%
+(503 - 345) / 345 × 100
+= 45.80%
 ```
 
-The raw material cost increased from:
+The increase in total mass is:
 
 ```text
-$9,370,865.70
+(2,104,886.7 - 2,082,414.6) / 2,082,414.6 × 100
+= 1.08%
 ```
 
-to:
+Therefore, Aluminium 7075-T6 provides approximately 45.8% higher yield strength than 2024-T3 with only a 1.08% increase in mass.
+
+The raw material cost increases from:
 
 ```text
-$10,945,410.80
+$9,370,865.70 → $10,945,410.80
 ```
 
-Aluminium 7075-T6 was therefore selected as the best overall option in the material comparison, considering its higher yield strength with only a small increase in mass compared with 2024-T3.
+Aluminium 7075-T6 was selected as the preferred material based on its higher yield strength and relatively small increase in mass compared with Aluminium 2024-T3.
 
 ---
 
-# 5. Free Vibration and Modal Analysis
+## 5. Free Vibration and Modal Analysis
 
 A free-vibration modal analysis was performed on the wing-box model using:
 
-```text
-Material: Aluminium 7075-T6
-Mesh: Medium, 0.05 m
-Element: SHELL181
-Solver: Block Lanczos
-```
+* **Material:** Aluminium 7075-T6
+* **Mesh:** Medium, 0.05 m
+* **Element:** SHELL181
+* **Solver:** Block Lanczos
 
 The model was analyzed as a cantilever wing box under free-vibration conditions.
 
@@ -294,24 +276,22 @@ The modal results provide the first four natural frequencies and corresponding d
 
 ---
 
-# 6. Summary of Results
+## 6. Summary of Results
 
-The main results of the study are:
-
-* The initial analytical thickness of **11.949 m** resulted in a maximum stress of approximately **988 MPa**, exceeding the **345 MPa** yield strength of Aluminium 2024-T3.
-* Increasing the modeled thickness to **31.5 m** reduced the maximum stress to approximately **340 MPa**.
+* The initial analytical thickness of 11.949 m resulted in a maximum stress of approximately 988 MPa, exceeding the 345 MPa yield strength of Aluminium 2024-T3.
+* Increasing the modeled thickness to 31.5 m reduced the maximum stress to approximately 340 MPa.
 * The 31.5 m thickness violates thin-shell assumptions and was documented as a modeling workaround.
-* Mesh refinement from **0.10 m to 0.01 m** produced approximately the same maximum stress of **143 MPa**.
-* The **0.05 m medium mesh** was selected as the best compromise between convergence and computational cost.
-* SHELL281 was evaluated separately because its higher number of degrees of freedom approached the **250,000-node ANSYS Student limit**.
-* The SHELL281 model used a **0.10 m mesh** and a **0.0026 m thickness** to avoid solver matrix instability.
+* Mesh refinement from 0.10 m to 0.01 m produced approximately the same maximum stress of 143 MPa.
+* The 0.05 m medium mesh was selected as the best compromise between convergence and computational cost.
+* SHELL281 was evaluated separately because its higher number of degrees of freedom approached the 250,000-node ANSYS Student limit.
+* The SHELL281 model used a 0.10 m mesh and a 0.0026 m thickness to avoid solver matrix instability.
 * Aluminium 7075-T6 was selected over 2024-T3 and Ti-6Al-4V based on the material comparison.
-* Aluminium 7075-T6 provided approximately **45% higher yield strength** than 2024-T3 with approximately **1.07% higher mass**.
-* The first four natural frequencies of the selected wing-box model were **46.6976 Hz, 72.1800 Hz, 98.9160 Hz, and 132.2590 Hz**.
+* Aluminium 7075-T6 provided approximately 45.8% higher yield strength than 2024-T3 with approximately 1.08% higher mass.
+* The first four natural frequencies of the selected wing-box model were 46.6976 Hz, 72.1800 Hz, 98.9160 Hz, and 132.2590 Hz.
 
 ---
 
-# Repository Structure
+## Repository Structure
 
 ```text
 /
@@ -325,31 +305,43 @@ The main results of the study are:
 │   ├── Element sensitivity
 │   └── Modal analysis
 │
+├── CAD/
+│   └── Model link and geometric specifications
+│
+├── FEA-Analysis/
+│   ├── Section 1 (Initial Sizing & Boundary Conditions)
+│   ├── Section 2 (Mesh Sensitivity Contours & Graphs)
+│   ├── Section 3 (Linear vs. Quadratic Element Contours)
+│   ├── Section 4 (Material Trade-Off Contours)
+│   └── Section 5 (Modal Vibration Mode Shapes)
+│
 ├── Python/
-│   └── Data processing and result comparison
+│   └── process_fea_results.py
 │
 ├── Results/
-│   ├── Stress results
-│   ├── Displacement results
-│   ├── Mesh sensitivity results
-│   ├── Material comparison
-│   └── Modal analysis
-│
-├── Plots/
-│   ├── Mesh comparison
-│   ├── Stress plots
-│   ├── Displacement plots
-│   └── Modal results
+│   ├── forces.xlsx
+│   ├── details.txt
+│   └── Infographics
 │
 └── Report/
     └── Project report and supporting documentation
 ```
+
+---
 
 ## Files and Folders
 
 ### `/APDL`
 
 Contains the APDL scripts used to build the model, define materials, generate the mesh, apply loads and boundary conditions, and run the structural analyses.
+
+### `/CAD`
+
+Contains the CAD model download link and geometric information for the wing box.
+
+### `/FEA-Analysis`
+
+Contains the visual results from the different analysis sections, including stress contours, displacement plots, mesh comparisons, material comparisons, and modal deformation plots.
 
 ### `/Python`
 
@@ -359,17 +351,14 @@ Contains scripts used for processing and comparing the numerical results.
 
 Contains the numerical output from the different analysis cases, including mesh, element, material, static structural, and modal studies.
 
-### `/Plots`
-
-Contains figures generated from the FEA results.
-
 ### `/Report`
 
 Contains the complete project report and supporting documentation.
 
 ---
 
-# License
+## License
 
-This project is distributed under the **MIT License**.
+This project is distributed under the MIT License.
 
+```
