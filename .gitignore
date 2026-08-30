@@ -1,1 +1,28 @@
+# ANSYS APDL temporary, database & solver binaries
+*.db
+*.dbb
+*.rst
+*.rth
+*.esav
+*.full
+*.mntr
+*.log
+*.err
+*.page
+*.tri
+*.stat
+*.lock
+*.dsp
+*.bck
 
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+venv/
+.ipynb_checkpoints/
+
+# OS metadata
+.DS_Store
+Thumbs.db
