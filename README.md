@@ -1,8 +1,7 @@
 
 
 # aerospace-wing-box-fea
-
-# High-g Aerodynamic Loading, Mesh and Element Sensitivity, and Modal Analysis of an Aerospace Wing Box Using APDL
+# ANSYS APDL simulation workflow evaluating high-g aeroload sizing, spatial grid convergence, multi-material trade-offs, and Block Lanczos eigenmode extraction for an aerospace wing box.
 
 **Author:** Muhammad Yousuf Baig  
 **Domain:** Computational Structural Mechanics / Aerospace Finite Element Analysis  
